@@ -4,15 +4,14 @@ public class Print1toN {
 
     public static void main(String[] args) {
         int num = 67;
-        printNumbers(1, num);
+        printNumbers(num);
     }
 
-    public static void printNumbers(int current, int num) {
-        if (current > num) {
+    public static void printNumbers(int num) {
+        if (num == 0) {
             return;
         }
-
-        System.out.println(current);
-        printNumbers(current + 1, num);
+        printNumbers(num - 1);
+        System.out.println(num);
     }
 }
