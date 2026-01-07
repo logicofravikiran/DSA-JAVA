@@ -1,4 +1,4 @@
-package Recursion;
+package PrepCO.Recursion;
 
 public class OptimizedLinearPower {
     public static void main(String[] args) {

@@ -1,4 +1,4 @@
-package Recursion;
+package PrepCO.Recursion;
 
 public class PrintDecreasingIncreasing {
     public static void main(String[] args) {
