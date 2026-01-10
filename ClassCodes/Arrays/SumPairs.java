@@ -1,4 +1,4 @@
-package Core2web.Arrays;
+package ClassCodes.Arrays;
 
 //print the sums of pairs(i,n-i)th elements in array
 public class SumPairs {

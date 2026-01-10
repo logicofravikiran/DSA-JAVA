@@ -1,4 +1,4 @@
-package Core2web.Arrays;
+package ClassCodes.Arrays;
 
 public class SecondHighestElement {
     public static void main(String[] args) {

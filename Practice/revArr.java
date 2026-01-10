@@ -4,7 +4,7 @@ import java.util.Arrays;
 public class revArr {
     public static void main(String[] args) {
         int[] arr = { 3, 5, 2, 6, 7, 9, 4 };
-        int[] arr2 = { 3, 5, 2, 6, 7, 9 };
+        // int[] arr2 = { 3, 5, 2, 6, 7, 9 };
         System.out.println(Arrays.toString(reveArray(arr)));
     }
 

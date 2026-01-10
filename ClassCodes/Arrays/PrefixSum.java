@@ -1,4 +1,4 @@
-package Core2web.Arrays;
+package ClassCodes.Arrays;
 
 import java.util.Arrays;
 
