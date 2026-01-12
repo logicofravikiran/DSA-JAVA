@@ -1,8 +1,8 @@
 package LinkedList.Basics;
 
-public class AddLast {
+public class AddFirst {
     public static void main(String[] args) {
-        AddLinkedList ll = new AddLinkedList();
+        AddFirstLinkedList ll = new AddFirstLinkedList();
         ll.addLast(10);
         ll.addLast(10);
         ll.addLast(20);
@@ -10,16 +10,13 @@ public class AddLast {
         ll.addLast(40);
         ll.addLast(50);
         ll.addLast(60);
+        // ll.display();
+        ll.addFirst(999);
         ll.display();
     }
 }
 
-class Node {
-    int data;
-    Node next;
-}
-
-class AddLinkedList {
+class AddFirstLinkedList {
     Node head;
     Node tail;
     int size;
@@ -42,9 +39,19 @@ class AddLinkedList {
     void display() {
         Node temp = head;
         while (temp != null) {
-            System.out.print(temp.data + "\t");
+            System.out.println(temp.data);
             temp = temp.next;
         }
-        System.out.println();
+    }
+
+    void addFirst(int value) {
+        Node temp = new Node();
+        temp.data = value;
+        if (size == 0) {
+            head = tail = temp;
+        } else {
+            temp.next = head;
+            head = temp;
+        }
     }
 }

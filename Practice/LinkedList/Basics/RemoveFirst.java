@@ -2,7 +2,7 @@ package LinkedList.Basics;
 
 public class RemoveFirst {
     public static void main(String[] args) {
-        LinkedList ll = new LinkedList();
+        RemoveLinkedListClass ll = new RemoveLinkedListClass();
         ll.addLast(10);
         ll.addLast(20);
         ll.addLast(30);
@@ -21,7 +21,7 @@ class Node {
     Node next;
 }
 
-class LinkedList {
+class RemoveLinkedListClass {
 
     Node head;
     Node tail;

@@ -1,9 +1,8 @@
 package LinkedList.Basics;
 
-public class AddLast {
+public class RemoveLast {
     public static void main(String[] args) {
-        AddLinkedList ll = new AddLinkedList();
-        ll.addLast(10);
+        RemoveLastLinkedList ll = new RemoveLastLinkedList();
         ll.addLast(10);
         ll.addLast(20);
         ll.addLast(30);
@@ -11,18 +10,31 @@ public class AddLast {
         ll.addLast(50);
         ll.addLast(60);
         ll.display();
+        ll.removeLast();
+        ll.display();
     }
 }
 
-class Node {
-    int data;
-    Node next;
-}
-
-class AddLinkedList {
+class RemoveLastLinkedList {
     Node head;
     Node tail;
     int size;
+
+    void removeLast() {
+        if (size == 0) {
+            System.out.println("List is empty");
+        } else if (size == 1) {
+            head = tail = null;
+        } else {
+            Node temp = head;
+            for (int index = 0; index < size - 2; index++) {
+                temp = temp.next;
+            }
+            tail = temp;
+            temp.next = null;
+            size--;
+        }
+    }
 
     void addLast(int value) {
         Node temp = new Node();
