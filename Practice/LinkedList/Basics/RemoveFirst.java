@@ -10,7 +10,7 @@ public class RemoveFirst {
         ll.addLast(50);
         ll.addLast(60);
         ll.display();
-        System.out.println(ll.size);
+        // System.out.println(ll.size);
         ll.removeFirst();
         ll.display();
     }
@@ -63,10 +63,8 @@ class RemoveLinkedListClass {
     void removeFirst() {
         if (size == 0) {
             System.out.println("List is empty");
-            head = tail = null;
         } else if (size == 1) {
-            head = head.next;
-            tail = null;
+            head = tail = null;
         } else {
             head = head.next;
         }
