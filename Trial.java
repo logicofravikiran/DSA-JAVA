@@ -1,9 +1,24 @@
 public class Trial {
+
+    /*
+     * 
+     * * * * *
+     * * *
+     * *
+     * 
+     * 
+     */
     public static void main(String[] args) {
-        int[] arr = { 1, 2, 3, 4, 5, 6, 7 };
-        for (int i = 0; i < arr.length; i++) {
-            int num = arr[i];
-            System.out.println(num);
+        int rows = 4;
+        int controller = 0;
+        for (int i = 0; i < rows; i++) {
+            System.out.print("*\t");
+            if (i == rows - 1 && controller <= rows) {
+                controller++;
+                i = -1;
+                rows--;
+                System.out.println();
+            }
         }
     }
 }

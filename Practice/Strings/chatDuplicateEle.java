@@ -8,7 +8,7 @@ public class chatDuplicateEle {
             return 0;
         }
 
-        int uniqueIndex = 0; // Index of the last unique element
+        int uniqueIndex = 0;
 
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] != nums[uniqueIndex]) {
@@ -18,7 +18,7 @@ public class chatDuplicateEle {
             }
         }
 
-        return uniqueIndex + 1; // Length of unique elements
+        return uniqueIndex + 1;
     }
 
     public static void main(String[] args) {
