@@ -1,3 +1,4 @@
+package Arrays_Folder.Normal_Questions;
 
 public class Petrol {
     public static void main(String[] args) {
