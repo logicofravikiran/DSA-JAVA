@@ -9,7 +9,6 @@ public class Code7ReverseInt {
             int digit = x % 10;
             x /= 10;
 
-            // overflow check
             if (rev > Integer.MAX_VALUE / 10 ||
                     (rev == Integer.MAX_VALUE / 10 && digit > 7)) {
                 return 0;
@@ -29,6 +28,6 @@ public class Code7ReverseInt {
     public static void main(String[] args) {
         int x = 1534236469;
         Code7ReverseInt obj = new Code7ReverseInt();
-        System.out.println(obj.reverse(x)); // 0
+        System.out.println(obj.reverse(x));
     }
 }
