@@ -9,14 +9,14 @@ public class MaxSubArraySum {
         int maxSum = 0;
 
         for (int i = 0; i < arr.length; i++) {
-            windowSum += arr[i]; // add new element
+            windowSum += arr[i];
 
             if (i >= k - 1) {
                 maxSum = Math.max(maxSum, windowSum);
-                windowSum -= arr[i - (k - 1)]; // remove old element
+                windowSum -= arr[i - (k - 1)];
             }
         }
 
-        System.out.println(maxSum); // Output: 9
+        System.out.println(maxSum);
     }
 }
