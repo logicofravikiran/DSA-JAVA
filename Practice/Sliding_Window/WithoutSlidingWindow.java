@@ -10,7 +10,7 @@ public class WithoutSlidingWindow {
 }
 
 class MaxSubArraySumWOSlidingWindow {
-    public int maxSum(int[] arr, int k) {
+    int maxSum(int[] arr, int k) {
         int max = 0;
         if (arr.length == 0 || arr.length < k) {
             return -1;

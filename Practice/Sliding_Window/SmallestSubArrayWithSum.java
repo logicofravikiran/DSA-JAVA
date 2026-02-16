@@ -9,7 +9,7 @@ public class SmallestSubArrayWithSum {
                 smallestSubArray(arr, target));
     }
 
-    public static int smallestSubArray(int[] arr, int target) {
+    private static int smallestSubArray(int[] arr, int target) {
 
         int left = 0, sum = 0;
         int minLength = Integer.MAX_VALUE;
