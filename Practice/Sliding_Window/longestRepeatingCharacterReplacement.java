@@ -3,6 +3,7 @@ package Sliding_Window;
 import java.util.*;
 
 public class longestRepeatingCharacterReplacement {
+
     public static void main(String[] args) {
         String str = "cadbzabcd";
         System.out.println(lengthOfLongestSubstringWithoutRepeatingCharacters(str));
