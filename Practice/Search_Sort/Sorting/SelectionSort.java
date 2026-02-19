@@ -1,4 +1,4 @@
-package Arrays_Folder.Sorting;
+package Search_Sort.Sorting;
 
 public class SelectionSort {
     int smallestInx = 0;

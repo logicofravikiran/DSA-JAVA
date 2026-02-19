@@ -1,4 +1,4 @@
-package Arrays_Folder.Searching;
+package Search_Sort.Searching;
 
 public class chatBinarySearch {
     public static void main(String[] args) {
