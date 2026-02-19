@@ -2,8 +2,8 @@ package CompanyWise.IBM;
 
 public class StringPalindrome {
     public static void main(String[] args) {
-        String str = "a";
-        System.out.println(isPalindrome(str));
+        String str = "Madam";
+        System.out.println(isPalindrome(str.toLowerCase()));
     }
 
     private static boolean isPalindrome(String str) {
