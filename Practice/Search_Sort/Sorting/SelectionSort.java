@@ -1,5 +1,7 @@
 package Search_Sort.Sorting;
 
+import java.util.Arrays;
+
 public class SelectionSort {
     int smallestInx = 0;
 
@@ -29,6 +31,7 @@ public class SelectionSort {
                 arr[i] = arr[smallestInx];
                 arr[smallestInx] = temp;
             }
+            System.out.println(Arrays.toString(arr));
 
         }
         return arr;
