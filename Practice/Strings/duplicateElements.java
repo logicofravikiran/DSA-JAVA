@@ -1,3 +1,4 @@
+
 class Solution {
     public int removeDuplicates(int[] nums) {
         int duplicate_count = 0;

@@ -17,6 +17,9 @@ public class MergeIntervals {
         int end = intervals[0][1];
         for (int i = 1; i < intervals.length; i++) {
             System.out.println(intervals[i][0] + " ," + intervals[i][1] + " start:- " + start + " end:- " + end);
+            if (isNewStart) {
+
+            }
 
             if (intervals[i - 1][1] >= intervals[i][0]) {
                 end = intervals[i][1];
