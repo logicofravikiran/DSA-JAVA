@@ -3,11 +3,11 @@ import java.util.*;
 public class FirstUniqueChar {
     public static void main(String[] args) {
         String s = "aabb";
-        // System.out.println(firstUniqueCharacterInString(s));
+        System.out.println(firstUniqueCharacterInString(s));
         System.out.println(OptimizedFirstUniqueCharacterInString(s));
     }
 
-    @Deprecated
+    // @Deprecated
     private static int firstUniqueCharacterInString(String s) {
         HashMap<Character, Integer> map = new HashMap<>();
 

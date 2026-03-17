@@ -26,7 +26,7 @@ public class Code424 {
                 }
             }
             if (!hm.containsKey(s.charAt(i)) && gapCount <= k) {
-                hm.put(s.charAt(i), gapCount);
+                // hm.put(s.charAt(i), gapCount);
             }
         }
         return 0;

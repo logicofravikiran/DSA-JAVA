@@ -11,6 +11,7 @@ public class SpanOfArray {
         for (int i = 0; i < n; i++) {
             arr[i] = sc.nextInt();
         }
+        sc.close();
 
         int max = Integer.MIN_VALUE;
         int min = arr[0];
