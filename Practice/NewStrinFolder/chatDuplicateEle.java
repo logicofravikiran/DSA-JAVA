@@ -1,3 +1,4 @@
+package NewStrinFolder;
 
 import java.util.Arrays;
 

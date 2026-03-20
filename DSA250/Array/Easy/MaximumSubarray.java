@@ -2,7 +2,7 @@ package DSA250.Array.Easy;
 
 public class MaximumSubarray {
     public static void main(String[] args) {
-        int[] arr = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+        int[] arr = { 1 };
         System.out.println(maxSubarray(arr));
 
     }

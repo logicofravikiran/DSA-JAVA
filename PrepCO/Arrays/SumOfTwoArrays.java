@@ -4,7 +4,7 @@ public class SumOfTwoArrays {
     public static void main(String[] args) {
         int[] arr1 = { 1, 5, 4, 9, 8, 4, 7, 3, 2 };
         int[] arr2 = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-        // sumOfTwoArrays(arr1, arr2);
+        sumOfTwoArrays(arr1, arr2);
         System.out.println("main method");
     }
 

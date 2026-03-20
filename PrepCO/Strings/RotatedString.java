@@ -8,6 +8,8 @@ public class RotatedString {
 
         String s1 = "abcd";
         String s2 = "cdab";
+        System.out.println(s1);
+        System.out.println(s2);
 
         System.out.println("Is true:- " + RotatedString.comparingString(str, str2));
     }

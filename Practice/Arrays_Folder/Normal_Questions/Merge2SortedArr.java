@@ -5,10 +5,12 @@ public class Merge2SortedArr {
         int arr1[] = { 1, 2, 5, 6, 11 };
         int arr2[] = { 4, 7, 9, 12, 15 };
         int arr[] = mergedArr(arr1, arr2);
+        System.out.println(arr);
     }
 
     static int[] mergedArr(int[] arr1, int[] arr2) {
         int maxLen = 0;
+        System.out.println(maxLen);
         if (arr1.length > arr2.length) {
             maxLen = arr1.length;
         } else {

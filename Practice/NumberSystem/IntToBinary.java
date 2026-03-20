@@ -2,8 +2,8 @@ package NumberSystem;
 
 public class IntToBinary {
     public static void main(String[] args) {
-        int num = 8;
-        String ns = Integer.toBinaryString(num);
+        // int num = 8;
+        // String ns = Integer.toBinaryString(num);
         // System.out.println(ns);x
 
         int n = 13;

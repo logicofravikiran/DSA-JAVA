@@ -11,7 +11,7 @@ public class LongestSubarray_withsum_GOE_k {
 
         int sum = 0;
         int right = 0;
-        int length = 0;
+        // int length = 0;
         int maxLength = Integer.MIN_VALUE;
         int left = 0;
         while (left <= right && right < arr.length) {

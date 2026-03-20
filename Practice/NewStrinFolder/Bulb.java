@@ -1,3 +1,4 @@
+package NewStrinFolder;
 
 public class Bulb {
     static int bulbNumber(int power, String str) {
