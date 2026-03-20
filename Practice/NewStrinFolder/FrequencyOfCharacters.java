@@ -1,3 +1,4 @@
+package NewStrinFolder;
 
 class FrequencyOfCharacter {
     public static void main(String[] args) {

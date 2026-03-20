@@ -1,3 +1,4 @@
+package NewStrinFolder;
 
 public class RemoveSpaces {
     public static void main(String[] args) {

@@ -1,3 +1,5 @@
+package NewStrinFolder;
+
 import java.util.*;
 
 public class FirstUniqueChar {
