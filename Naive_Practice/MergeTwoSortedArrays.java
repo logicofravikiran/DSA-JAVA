@@ -27,7 +27,7 @@ public class MergeTwoSortedArrays {
         // int[] arr1 = { 1, 3, 5, 6, 7, 8, 9 };
         // int[] arr2 = { 2, 4, 5, 10 };
 
-        boolean isTakenLast = false;
+        // boolean isTakenLast = false;
         for (int index = 0; index < result.length; index++) {
             System.out.println(Arrays.toString(result));
             System.out.println("Now comparing:- " + arr1[p1] + " & " + arr2[p2]);
