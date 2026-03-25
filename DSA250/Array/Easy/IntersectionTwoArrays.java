@@ -10,8 +10,6 @@ public class IntersectionTwoArrays {
     }
 
     private static int[] intersectionOfTwoArrays(int[] nums1, int[] nums2) {
-        int p1 = 0;
-        int p2 = 0;
 
         int length = Math.max(nums1.length, nums2.length);
         int[] result = new int[length];

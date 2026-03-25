@@ -15,16 +15,12 @@ public class ProductExceptSelf {
             result[i] = product;
             product *= nums[i];
         }
-        System.out.println(Arrays.toString(result));
         product = 1;
-        // nums = result;
         for (int i = nums.length - 1; i >= 0; i--) {
             result[i] = result[i] * product;
             product *= nums[i];
         }
 
-        System.out.println(Arrays.toString(result));
-
-        return new int[9];
+        return result;
     }
 }
