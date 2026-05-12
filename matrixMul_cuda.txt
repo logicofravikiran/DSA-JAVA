@@ -1,0 +1,841 @@
+%%writefile matrixMul.cu
+#include <stdio.h>
+
+#define N 10
+
+__global__ void matrixMul(int A[N][N], int B[N][N], int C[N][N], int n)
+{
+    int row = threadIdx.y;
+    int col = threadIdx.x;
+
+    // Check valid index
+    if(row < n && col < n)
+    {
+        int sum = 0;
+
+        for(int k = 0; k < n; k++)
+        {
+            sum += A[row][k] * B[k][col];
+        }
+
+        C[row][col] = sum;
+    }
+}
+
+int main()
+{
+    int n;
+
+    printf("Enter the size of matrix: ");
+    scanf("%d", &n);
+
+    if(n > N)
+{
+    printf("Matrix size exceeds limit of %d\n", N);
+    return 0;
+}
+
+    int A[N][N], B[N][N], C[N][N];
+
+    // Input Matrix A
+    printf("Enter Matrix A:\n");
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+    // Input Matrix B
+    printf("Enter Matrix B:\n");
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+    // Device matrices
+    int (*d_A)[N], (*d_B)[N], (*d_C)[N];
+
+    // Allocate FULL matrix memory
+    cudaMalloc((void**)&d_A, sizeof(int) * N * N);
+    cudaMalloc((void**)&d_B, sizeof(int) * N * N);
+    cudaMalloc((void**)&d_C, sizeof(int) * N * N);
+
+    // Copy FULL matrix memory
+    cudaMemcpy(d_A, A, sizeof(int) * N * N, cudaMemcpyHostToDevice);
+    cudaMemcpy(d_B, B, sizeof(int) * N * N, cudaMemcpyHostToDevice);
+
+    // Thread block
+    dim3 threadsPerBlock(n, n);
+
+    // Launch kernel
+    matrixMul<<<1, threadsPerBlock>>>(d_A, d_B, d_C, n);
+
+    cudaDeviceSynchronize();
+
+    // Copy result back
+    cudaMemcpy(C, d_C, sizeof(int) * N * N, cudaMemcpyDeviceToHost);
+
+    // Print result
+    printf("Result Matrix:\n");
+
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            printf("%d ", C[i][j]);
+        }
+        printf("\n");
+    }
+
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%writefile matrixMul.cu     // Save this CUDA program into a file named matrixMul.cu
+
+#include <stdio.h>           // Standard Input Output library for printf() and scanf()
+
+#define N 10                 // Define maximum matrix size as 10 x 10
+
+
+// ==========================================================
+// CUDA Kernel Function
+// Runs on GPU and performs matrix multiplication
+// ==========================================================
+__global__ void matrixMul(int A[N][N], int B[N][N], int C[N][N], int n)
+{
+
+    // threadIdx.y gives row index of current thread
+    int row = threadIdx.y;
+
+    // threadIdx.x gives column index of current thread
+    int col = threadIdx.x;
+
+
+    // Check whether thread indices are valid
+    // Prevents invalid memory access
+    if(row < n && col < n)
+    {
+
+        // Variable to store temporary sum
+        int sum = 0;
+
+
+        // Loop for matrix multiplication
+        // k moves across row of A and column of B
+        for(int k = 0; k < n; k++)
+        {
+
+            // Matrix multiplication formula
+            // A[row][k] multiplied with B[k][col]
+            // Then added into sum
+            sum += A[row][k] * B[k][col];
+        }
+
+
+        // Store final computed value into result matrix C
+        C[row][col] = sum;
+    }
+}
+
+
+
+// ==========================================================
+// Main Function
+// Program execution starts here
+// ==========================================================
+int main()
+{
+
+    // Variable to store matrix size
+    int n;
+
+
+    // Ask user to enter matrix size
+    printf("Enter the size of matrix: ");
+
+
+    // Read matrix size from user
+    scanf("%d", &n);
+
+
+    // Check if entered matrix size exceeds maximum limit
+    if(n > N)
+{
+
+    // Print error message if size exceeds limit
+    printf("Matrix size exceeds limit of %d\n", N);
+
+    // Stop program execution
+    return 0;
+}
+
+
+    // Matrices stored in CPU memory (RAM)
+    int A[N][N], B[N][N], C[N][N];
+
+
+
+    // ======================================================
+    // Input Matrix A
+    // ======================================================
+
+    // Ask user to enter matrix A elements
+    printf("Enter Matrix A:\n");
+
+
+    // Loop for rows
+    for(int i = 0; i < n; i++)
+    {
+
+        // Loop for columns
+        for(int j = 0; j < n; j++)
+        {
+
+            // Read each matrix element
+            scanf("%d", &A[i][j]);
+        }
+    }
+
+
+
+    // ======================================================
+    // Input Matrix B
+    // ======================================================
+
+    // Ask user to enter matrix B elements
+    printf("Enter Matrix B:\n");
+
+
+    // Loop for rows
+    for(int i = 0; i < n; i++)
+    {
+
+        // Loop for columns
+        for(int j = 0; j < n; j++)
+        {
+
+            // Read each matrix element
+            scanf("%d", &B[i][j]);
+        }
+    }
+
+
+
+    // ======================================================
+    // Device Matrices (GPU Memory Pointers)
+    // ======================================================
+
+    // d_A -> GPU matrix A
+    // d_B -> GPU matrix B
+    // d_C -> GPU result matrix
+    int (*d_A)[N], (*d_B)[N], (*d_C)[N];
+
+
+
+    // ======================================================
+    // Allocate Memory on GPU
+    // ======================================================
+
+    // Allocate memory for matrix A on GPU
+    cudaMalloc((void**)&d_A, sizeof(int) * N * N);
+
+    // Allocate memory for matrix B on GPU
+    cudaMalloc((void**)&d_B, sizeof(int) * N * N);
+
+    // Allocate memory for matrix C on GPU
+    cudaMalloc((void**)&d_C, sizeof(int) * N * N);
+
+
+
+    // ======================================================
+    // Copy Data from CPU to GPU
+    // ======================================================
+
+    // Copy matrix A from CPU memory to GPU memory
+    cudaMemcpy(d_A, A, sizeof(int) * N * N, cudaMemcpyHostToDevice);
+
+    // Copy matrix B from CPU memory to GPU memory
+    cudaMemcpy(d_B, B, sizeof(int) * N * N, cudaMemcpyHostToDevice);
+
+
+
+    // ======================================================
+    // Create 2D Thread Block
+    // ======================================================
+
+    // Creates n x n threads
+    // Example:
+    // n = 2
+    // Creates:
+    // (0,0) (0,1)
+    // (1,0) (1,1)
+    dim3 threadsPerBlock(n, n);
+
+
+
+    // ======================================================
+    // Launch CUDA Kernel
+    // ======================================================
+
+    // Syntax:
+    // kernel<<<number_of_blocks, threads_per_block>>>();
+
+    // Here:
+    // 1 block
+    // n x n threads
+    matrixMul<<<1, threadsPerBlock>>>(d_A, d_B, d_C, n);
+
+
+
+    // CPU waits until GPU finishes execution
+    cudaDeviceSynchronize();
+
+
+
+    // ======================================================
+    // Copy Result from GPU back to CPU
+    // ======================================================
+
+    // Copy matrix C from GPU memory to CPU memory
+    cudaMemcpy(C, d_C, sizeof(int) * N * N, cudaMemcpyDeviceToHost);
+
+
+
+    // ======================================================
+    // Print Result Matrix
+    // ======================================================
+
+    // Display heading
+    printf("Result Matrix:\n");
+
+
+    // Loop through rows
+    for(int i = 0; i < n; i++)
+    {
+
+        // Loop through columns
+        for(int j = 0; j < n; j++)
+        {
+
+            // Print each matrix element
+            printf("%d ", C[i][j]);
+        }
+
+        // Move to next line after each row
+        printf("\n");
+    }
+
+
+
+    // ======================================================
+    // Free GPU Memory
+    // ======================================================
+
+    // Release GPU memory of matrix A
+    cudaFree(d_A);
+
+    // Release GPU memory of matrix B
+    cudaFree(d_B);
+
+    // Release GPU memory of matrix C
+    cudaFree(d_C);
+
+
+
+    // Program executed successfully
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+                ADDITIONAL DETAILS ABOUT CUDA
+   =========================================================
+
+
+How to run : 
+paste the code , shift + Enter
+!nvcc matrixMul.cu -o matrixMul
+!./matrixMul
+Enter size of matrix: 3
+Enter Matrix A:
+0 0 0
+0 1 0
+1 0 1
+Enter Matrix B:
+1 0 1
+1 0 1
+1 1 1
+Result Matrix:
+0 0 0 
+0 0 0 
+0 0 0 
+
+// =========================================================
+// FILE CREATION DETAILS
+// =========================================================
+
+// %%writefile vector_input.cu
+// ---------------------------------
+// This is a Jupyter Notebook magic command.
+//
+// It saves the entire CUDA program into a file named:
+// vector_input.cu
+//
+// .cu extension indicates that this is a CUDA C/C++ program.
+//
+// CUDA files are compiled using NVIDIA CUDA Compiler:
+// nvcc
+//
+// Example Compile Command:
+// nvcc vector_input.cu -o vector
+//
+// Example Run Command:
+// ./vector
+//
+// =========================================================
+
+
+
+
+
+1. WHAT IS CUDA?
+-----------------------------------------------------------
+CUDA (Compute Unified Device Architecture) is a parallel
+computing platform developed by NVIDIA.
+
+It allows execution of programs on GPU instead of CPU.
+
+CPU:
+- Few powerful cores
+- Best for sequential tasks
+
+GPU:
+- Thousands of smaller cores
+- Best for parallel tasks
+
+CUDA is widely used in:
+- Artificial Intelligence
+- Deep Learning
+- Matrix Operations
+- Scientific Computing
+- Image Processing
+- Simulations
+
+===========================================================
+
+2. WHY MATRIX MULTIPLICATION USES GPU?
+-----------------------------------------------------------
+Matrix multiplication contains many repeated calculations.
+
+Example:
+
+C[0][0]
+C[0][1]
+C[1][0]
+C[1][1]
+
+Each element calculation is independent.
+
+So GPU can compute all elements simultaneously
+using parallel threads.
+
+This increases speed significantly.
+
+===========================================================
+
+3. MATRIX MULTIPLICATION FORMULA
+-----------------------------------------------------------
+
+Formula:
+
+C[i][j] =
+A[i][0] * B[0][j] +
+A[i][1] * B[1][j] +
+A[i][2] * B[2][j]
+...
+
+General Formula:
+
+C[i][j] += A[i][k] * B[k][j]
+
+===========================================================
+
+4. THREAD MAPPING IN THIS PROGRAM
+-----------------------------------------------------------
+
+Each CUDA thread computes ONE matrix element.
+
+Example:
+
+Thread (0,0) ---> C[0][0]
+Thread (0,1) ---> C[0][1]
+Thread (1,0) ---> C[1][0]
+Thread (1,1) ---> C[1][1]
+
+This is called:
+"One Thread Per Element"
+
+===========================================================
+
+5. threadIdx.x AND threadIdx.y
+-----------------------------------------------------------
+
+threadIdx.x
+------------------
+Represents column index
+
+threadIdx.y
+------------------
+Represents row index
+
+Example:
+
+dim3 threads(2,2);
+
+Creates:
+
+(0,0)  (0,1)
+(1,0)  (1,1)
+
+===========================================================
+
+6. dim3 DATA TYPE
+-----------------------------------------------------------
+
+dim3 is CUDA's built-in datatype for:
+- 2D thread blocks
+- 3D thread blocks
+
+Syntax:
+
+dim3 variable_name(x, y, z);
+
+Example:
+
+dim3 threadsPerBlock(4,4);
+
+Creates:
+4 rows × 4 columns threads
+
+===========================================================
+
+7. CUDA MEMORY FUNCTIONS
+-----------------------------------------------------------
+
+A) cudaMalloc()
+-------------------------
+Allocates memory on GPU.
+
+Syntax:
+cudaMalloc(pointer, size);
+
+Example:
+cudaMalloc((void**)&d_A, sizeof(int)*N*N);
+
+-----------------------------------------------------------
+
+B) cudaMemcpy()
+-------------------------
+Copies data between CPU and GPU.
+
+Syntax:
+cudaMemcpy(destination, source, size, direction);
+
+Directions:
+cudaMemcpyHostToDevice
+cudaMemcpyDeviceToHost
+
+-----------------------------------------------------------
+
+C) cudaFree()
+-------------------------
+Releases GPU memory.
+
+Example:
+cudaFree(d_A);
+
+===========================================================
+
+8. CUDA KERNEL FUNCTION
+-----------------------------------------------------------
+
+Kernel = Function executed on GPU.
+
+Defined using:
+__global__
+
+Example:
+
+__global__ void matrixMul()
+
+Called using:
+<<<blocks, threads>>>
+
+===========================================================
+
+9. KERNEL LAUNCH CONFIGURATION
+-----------------------------------------------------------
+
+Syntax:
+
+kernel<<<blocks, threads>>>();
+
+Example:
+
+matrixMul<<<1, threadsPerBlock>>>();
+
+Means:
+- 1 block
+- n × n threads
+
+===========================================================
+
+10. WHY BOUNDARY CHECK IS IMPORTANT?
+-----------------------------------------------------------
+
+Condition:
+
+if(row < n && col < n)
+
+Purpose:
+- Prevent invalid memory access
+- Prevent crashes
+- Ensures only valid threads work
+
+Without this condition:
+Threads may access memory outside matrix range.
+
+===========================================================
+
+11. COMPLETE EXECUTION FLOW
+-----------------------------------------------------------
+
+STEP 1:
+User enters matrices
+
+STEP 2:
+Matrices stored in CPU RAM
+
+STEP 3:
+GPU memory allocated
+
+STEP 4:
+Matrices copied CPU → GPU
+
+STEP 5:
+GPU threads perform multiplication
+
+STEP 6:
+Result copied GPU → CPU
+
+STEP 7:
+Result matrix printed
+
+===========================================================
+
+12. EXAMPLE EXECUTION
+-----------------------------------------------------------
+
+Input Matrix A:
+
+1 2
+3 4
+
+Input Matrix B:
+
+5 6
+7 8
+
+-----------------------------------------------------------
+
+Thread (0,0):
+
+C[0][0]
+= (1×5) + (2×7)
+= 5 + 14
+= 19
+
+-----------------------------------------------------------
+
+Thread (0,1):
+
+C[0][1]
+= (1×6) + (2×8)
+= 6 + 16
+= 22
+
+-----------------------------------------------------------
+
+Thread (1,0):
+
+C[1][0]
+= (3×5) + (4×7)
+= 15 + 28
+= 43
+
+-----------------------------------------------------------
+
+Thread (1,1):
+
+C[1][1]
+= (3×6) + (4×8)
+= 18 + 32
+= 50
+
+-----------------------------------------------------------
+
+Final Result Matrix:
+
+19 22
+43 50
+
+===========================================================
+
+13. MEMORY REPRESENTATION
+-----------------------------------------------------------
+
+Matrix stored in linear memory:
+
+2D Matrix:
+1 2
+3 4
+
+Stored as:
+1 2 3 4
+
+Index Formula:
+index = row * number_of_columns + column
+
+===========================================================
+
+14. LIMITATIONS OF THIS PROGRAM
+-----------------------------------------------------------
+
+This program launches:
+1 block only
+
+GPU blocks have thread limit:
+Usually 1024 threads maximum.
+
+For large matrices:
+Use multiple blocks.
+
+Optimized launch:
+
+dim3 threads(16,16);
+
+dim3 blocks((n+15)/16, (n+15)/16);
+
+===========================================================
+
+15. ADVANTAGES OF CUDA MATRIX MULTIPLICATION
+-----------------------------------------------------------
+
+- Faster execution
+- Massive parallelism
+- Efficient for large matrices
+- Used in Deep Learning
+- Used in Neural Networks
+- Used in Graphics Processing
+
+===========================================================
+
+16. COMPILATION COMMAND
+-----------------------------------------------------------
+
+Compile:
+nvcc matrixMul.cu -o matrixMul
+
+Run:
+./matrixMul
+
+===========================================================
+
+17. REAL WORLD APPLICATIONS
+-----------------------------------------------------------
+
+- Artificial Intelligence
+- Deep Learning
+- Computer Vision
+- Scientific Simulations
+- Video Rendering
+- Robotics
+- Weather Forecasting
+- Big Data Analytics
+
+=========================================================== */

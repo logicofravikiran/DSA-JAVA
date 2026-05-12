@@ -1,0 +1,485 @@
+%%writefile vector_input.cu
+#include <stdio.h>  //standard input output library
+
+__global__ void vectorAdd(int *A, int *B, int *C, int n) {  //cuda keyword
+    int i = blockIdx.x * blockDim.x + threadIdx.x; //global thread ID
+    if (i < n) {
+        C[i] = A[i] + B[i];
+    }
+}
+
+int main() {
+    int N; //stores vector size
+    printf("Enter size of vector: ");
+    scanf("%d", &N);
+
+    int A[N], B[N], C[N]; //3 arrayys created in ram (cpu memory)
+    int *d_A, *d_B, *d_C;  // d_ means device(GPU memory)these pointers will store address of A,B,C in GPU memory
+    int size = N * sizeof(int);
+
+    printf("Enter elements of A:\n");
+    for(int i = 0; i < N; i++) scanf("%d", &A[i]);
+
+    printf("Enter elements of B:\n");
+    for(int i = 0; i < N; i++) scanf("%d", &B[i]);
+
+    cudaMalloc((void**)&d_A, size); //allocates memory inside gpu
+    cudaMalloc((void**)&d_B, size);
+    cudaMalloc((void**)&d_C, size);
+
+    cudaMemcpy(d_A, A, size, cudaMemcpyHostToDevice); // copies arrays from cpu to gpu
+    cudaMemcpy(d_B, B, size, cudaMemcpyHostToDevice);
+
+    vectorAdd<<<1, N>>>(d_A, d_B, d_C, N);  //kernel launch syntax(blocks,threads)
+    cudaDeviceSynchronize();  //cpu waits until gpu finishes execution
+
+    cudaMemcpy(C, d_C, size, cudaMemcpyDeviceToHost);  //copies result back to cpu
+
+    printf("Result:\n");
+    for(int i = 0; i < N; i++) {
+        printf("%d ", C[i]);
+    }
+
+    cudaFree(d_A);
+    cudaFree(d_B);
+    cudaFree(d_C);
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%writefile vector_input.cu   // Save this code into a CUDA file named vector_input.cu
+
+#include <stdio.h>            // Standard input-output library for printf() and scanf()
+
+// CUDA Kernel Function (Runs on GPU)
+__global__ void vectorAdd(int *A, int *B, int *C, int n) {
+
+    // Calculate global thread index
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+    // Check boundary condition to avoid invalid memory access
+    if (i < n) {
+
+        // Add corresponding elements of A and B and store in C
+        C[i] = A[i] + B[i];
+    }
+}
+
+int main() {
+
+    int N;   // Variable to store vector size
+
+    // Ask user to enter size of vectors
+    printf("Enter size of vector: ");
+
+    // Read vector size from user
+    scanf("%d", &N);
+
+    // Arrays stored in CPU memory (Host Memory)
+    int A[N], B[N], C[N];
+
+    // GPU pointers (Device Memory pointers)
+    int *d_A, *d_B, *d_C;
+
+    // Calculate total memory size in bytes
+    int size = N * sizeof(int);
+
+    // Input elements of vector A
+    printf("Enter elements of A:\n");
+
+    // Loop to read elements of A
+    for(int i = 0; i < N; i++)
+        scanf("%d", &A[i]);
+
+    // Input elements of vector B
+    printf("Enter elements of B:\n");
+
+    // Loop to read elements of B
+    for(int i = 0; i < N; i++)
+        scanf("%d", &B[i]);
+
+    // Allocate memory on GPU for vector A
+    cudaMalloc((void**)&d_A, size);
+
+    // Allocate memory on GPU for vector B
+    cudaMalloc((void**)&d_B, size);
+
+    // Allocate memory on GPU for result vector C
+    cudaMalloc((void**)&d_C, size);
+
+    // Copy vector A from CPU memory to GPU memory
+    cudaMemcpy(d_A, A, size, cudaMemcpyHostToDevice);
+
+    // Copy vector B from CPU memory to GPU memory
+    cudaMemcpy(d_B, B, size, cudaMemcpyHostToDevice);
+
+    // Launch CUDA kernel
+    // <<<1, N>>> means:
+    // 1 block and N threads
+    vectorAdd<<<1, N>>>(d_A, d_B, d_C, N);
+
+    // Wait until GPU finishes execution
+    cudaDeviceSynchronize();
+
+    // Copy result vector C from GPU memory back to CPU memory
+    cudaMemcpy(C, d_C, size, cudaMemcpyDeviceToHost);
+
+    // Print result heading
+    printf("Result:\n");
+
+    // Loop to print resultant vector
+    for(int i = 0; i < N; i++) {
+
+        // Print each element of vector C
+        printf("%d ", C[i]);
+    }
+
+    // Free GPU memory allocated for vector A
+    cudaFree(d_A);
+
+    // Free GPU memory allocated for vector B
+    cudaFree(d_B);
+
+    // Free GPU memory allocated for vector C
+    cudaFree(d_C);
+
+    // Indicate successful program execution
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================================
+                ADDITIONAL DETAILS ABOUT CUDA
+   =========================================================
+
+How to run : 
+paste the code , shift + Enter
+!nvcc vector_input.cu -o vector_input
+!./vector_input
+Enter size of vector: 5
+Enter elements of A:
+1
+2
+3
+4
+5
+Enter elements of B:
+5
+1
+2
+3
+4
+Result:
+6 3 5 7 9 
+  
+
+ 	
+// =========================================================
+// FILE CREATION DETAILS
+// =========================================================
+
+// %%writefile vector_input.cu
+// ---------------------------------
+// This is a Jupyter Notebook magic command.
+//
+// It saves the entire CUDA program into a file named:
+// vector_input.cu
+//
+// .cu extension indicates that this is a CUDA C/C++ program.
+//
+// CUDA files are compiled using NVIDIA CUDA Compiler:
+// nvcc
+//
+// Example Compile Command:
+// nvcc vector_input.cu -o vector
+//
+// Example Run Command:
+// ./vector
+//
+// =========================================================
+
+
+// Formula:
+int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+// This line calculates the unique global thread ID.
+//
+// Formula Meaning:
+// Global Thread ID =
+// (Current Block Number × Threads Per Block)
+// + Thread Number Inside Block
+
+
+
+1. WHAT IS CUDA?
+-----------------------------------------------------------
+CUDA (Compute Unified Device Architecture) is a parallel
+computing platform developed by NVIDIA.
+
+It allows programmers to use GPU power for faster execution
+of programs.
+
+CPU = Few powerful cores
+GPU = Thousands of smaller cores
+
+GPU is best for:
+- Parallel processing
+- Matrix operations
+- Deep Learning
+- Scientific computing
+- Image processing
+
+-----------------------------------------------------------
+
+2. HOST VS DEVICE
+-----------------------------------------------------------
+
+HOST   = CPU memory (RAM)
+DEVICE = GPU memory
+
+In this program:
+
+A, B, C  -> Host arrays
+d_A,d_B,d_C -> Device arrays
+
+Data Flow:
+CPU Memory ---> GPU Memory ---> CPU Memory
+
+-----------------------------------------------------------
+
+3. CUDA KEYWORDS
+-----------------------------------------------------------
+
+__global__
+------------
+- Function runs on GPU
+- Called from CPU
+
+Example:
+__global__ void add()
+
+-----------------------------------------------------------
+
+4. KERNEL FUNCTION
+-----------------------------------------------------------
+
+A kernel is a function executed on GPU.
+
+Example:
+vectorAdd<<<1,N>>>();
+
+GPU launches many threads simultaneously.
+
+-----------------------------------------------------------
+
+5. THREADS AND BLOCKS
+-----------------------------------------------------------
+
+CUDA uses hierarchy:
+
+Grid
+ └── Blocks
+      └── Threads
+
+Syntax:
+kernel<<<number_of_blocks, threads_per_block>>>();
+
+Example:
+vectorAdd<<<2,4>>>();
+
+Means:
+2 blocks
+4 threads per block
+
+Total threads = 8
+
+-----------------------------------------------------------
+
+6. THREAD INDEX CALCULATION
+-----------------------------------------------------------
+
+Formula:
+i = blockIdx.x * blockDim.x + threadIdx.x
+
+Where:
+blockIdx.x  = Current block number
+blockDim.x  = Threads per block
+threadIdx.x = Thread number inside block
+
+Example:
+Block = 1
+Threads per block = 4
+Thread = 2
+
+i = (1 * 4) + 2
+i = 6
+
+-----------------------------------------------------------
+
+7. cudaMalloc()
+-----------------------------------------------------------
+
+Used to allocate memory on GPU.
+
+Syntax:
+cudaMalloc(pointer, size);
+
+Example:
+cudaMalloc((void**)&d_A, size);
+
+Similar to malloc() in C.
+
+-----------------------------------------------------------
+
+8. cudaMemcpy()
+-----------------------------------------------------------
+
+Used to copy data between CPU and GPU.
+
+Syntax:
+cudaMemcpy(destination, source, size, direction);
+
+Directions:
+cudaMemcpyHostToDevice
+cudaMemcpyDeviceToHost
+
+-----------------------------------------------------------
+
+9. cudaDeviceSynchronize()
+-----------------------------------------------------------
+
+Makes CPU wait until GPU finishes execution.
+
+Without synchronization:
+CPU may continue before GPU completes work.
+
+-----------------------------------------------------------
+
+10. cudaFree()
+-----------------------------------------------------------
+
+Used to release GPU memory.
+
+Important to avoid memory leaks.
+
+Example:
+cudaFree(d_A);
+
+-----------------------------------------------------------
+
+11. WORKING OF THIS PROGRAM
+-----------------------------------------------------------
+
+Input:
+A = [1 2 3]
+B = [10 20 30]
+
+GPU Parallel Addition:
+C[0] = 1 + 10 = 11
+C[1] = 2 + 20 = 22
+C[2] = 3 + 30 = 33
+
+Output:
+11 22 33
+
+-----------------------------------------------------------
+
+12. ADVANTAGES OF CUDA
+-----------------------------------------------------------
+
+- Very fast execution
+- Massive parallelism
+- Best for large computations
+- Used in AI and Deep Learning
+- Efficient for matrix operations
+
+-----------------------------------------------------------
+
+13. LIMITATION OF THIS PROGRAM
+-----------------------------------------------------------
+
+This code uses:
+vectorAdd<<<1,N>>>();
+
+One block can support limited threads
+(usually 1024 maximum).
+
+For very large vectors:
+Use multiple blocks.
+
+Better version:
+vectorAdd<<<(N+255)/256,256>>>();
+
+-----------------------------------------------------------
+
+14. COMPILATION COMMAND
+-----------------------------------------------------------
+
+Compile:
+nvcc vector_input.cu -o vector
+
+Run:
+./vector
+
+-----------------------------------------------------------
+
+15. REAL WORLD APPLICATIONS
+-----------------------------------------------------------
+
+- Artificial Intelligence
+- Deep Learning
+- Image Processing
+- Scientific Simulations
+- Data Analytics
+- Gaming
+- Video Rendering
+
+========================================================= */

@@ -1,0 +1,443 @@
+
+#include<iostream>   // For input and output operations
+#include<omp.h>      // OpenMP library for parallel programming
+
+using namespace std;
+
+
+int minval(int arr[], int n){
+
+    int minval = arr[0];   // Assume first element is minimum
+
+    // Parallel loop with reduction
+    // Each thread maintains its own local minval
+    #pragma omp parallel for reduction(min : minval)
+
+    for(int i = 0; i < n; i++){
+
+        // Compare current element with minimum
+        if(arr[i] < minval)
+
+            // Update minimum
+            minval = arr[i];
+    }
+
+    // Return final minimum value
+    return minval;
+}
+
+
+int maxval(int arr[], int n){
+
+    int maxval = arr[0];   // Assume first element is maximum
+
+    // Parallel loop with reduction
+    #pragma omp parallel for reduction(max : maxval)
+
+    for(int i = 0; i < n; i++){
+
+        // Compare current element with maximum
+        if(arr[i] > maxval)
+
+            // Update maximum
+            maxval = arr[i];
+    }
+
+    // Return final maximum value
+    return maxval;
+}
+
+
+int sum(int arr[], int n){
+
+    int sum = 0;   // Initialize summation variable
+
+    // Parallel loop with addition reduction
+    #pragma omp parallel for reduction(+ : sum)
+
+    for(int i = 0; i < n; i++){
+
+        // Add array element
+        sum += arr[i];
+    }
+
+    // Return total sum
+    return sum;
+}
+
+
+double average(int arr[], int n){
+
+    // Convert to double for decimal result
+    return (double)sum(arr, n) / n;
+}
+
+/*
+==========================================================
+MAIN FUNCTION
+==========================================================
+*/
+int main(){
+
+    // Number of elements
+    // int n = 5;
+    
+    // Number of elements
+    int n;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    int arr[n];
+
+    cout << "Enter array elements:\n";
+
+    for(int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+
+    // Array initialization
+    // int arr[] = {1,2,3,4,5};
+
+    // Find and print minimum value
+    cout << "The minimum value is: "
+         << minval(arr, n)
+         << '\n';
+
+    // Find and print maximum value
+    cout << "The maximum value is: "
+         << maxval(arr, n)
+         << '\n';
+
+    // Find and print summation
+    cout << "The summation is: "
+         << sum(arr, n)
+         << '\n';
+
+    // Find and print average
+    cout << "The average is: "
+         << average(arr, n)
+         << '\n';
+
+    return 0;   // Successful program termination
+}
+
+/*
+
+==========================================================
+                    SAMPLE OUTPUT
+==========================================================
+Enter number of elements: 5
+Enter array elements:
+1 2 3 4 5
+The minimum value is: 1
+The maximum value is: 5
+The summation is: 15
+The average is: 3
+
+==========================================================
+
+*/
+
+
+
+
+  /*
+==========================================================
+NOTE FOR WINDOWS USERS
+==========================================================
+Some older Windows compilers may not fully support
+OpenMP reduction operations like:
+#pragma omp parallel for reduction(min : variable)
+or
+#pragma omp parallel for reduction(max : variable)
+Recommended:
+- Use Linux
+- OR Use WSL (Windows Subsystem for Linux)
+- OR Use MSYS2 MinGW64 compiler
+
+Compilation Command:
+g++ filename.cpp -fopenmp
+==========================================================
+*/
+
+
+/*
+==========================================================
+FUNCTION: minval()
+==========================================================
+Purpose:
+Find minimum value in array using parallel reduction.
+
+Parameters:
+arr[] -> Input array
+n     -> Size of array
+
+Return:
+Minimum element from array
+
+Reduction(min : minval):
+Each thread computes local minimum.
+Finally all local minimums combine into global minimum.
+==========================================================
+*/
+
+/*
+==========================================================
+FUNCTION: maxval()
+==========================================================
+Purpose:
+Find maximum value in array using parallel reduction.
+
+Reduction(max : maxval):
+Each thread computes local maximum.
+OpenMP combines all maximum values at end.
+==========================================================
+*/
+
+/*
+==========================================================
+FUNCTION: sum()
+==========================================================
+Purpose:
+Calculate sum of array elements using parallel reduction.
+
+Reduction(+ : sum):
+Each thread calculates partial sum.
+All partial sums combine into final result.
+==========================================================
+*/
+
+/*
+==========================================================
+FUNCTION: average()
+==========================================================
+
+Purpose:
+Calculate average of array elements.
+
+Formula:
+Average = Sum / Number of Elements
+
+==========================================================
+*/
+
+
+
+
+
+/*
+==========================================================
+                THEORY OF OPENMP REDUCTION
+==========================================================
+
+1) WHAT IS REDUCTION?
+----------------------------------------------------------
+
+Reduction is an OpenMP technique used to safely combine
+results from multiple threads into a single variable.
+
+Example:
+- Sum
+- Minimum
+- Maximum
+- Multiplication
+
+Without reduction:
+Multiple threads updating same variable can cause
+RACE CONDITION.
+
+
+==========================================================
+2) RACE CONDITION
+==========================================================
+
+Race condition occurs when multiple threads access
+and modify shared data simultaneously.
+
+Example:
+
+sum += arr[i];
+
+If many threads execute this together,
+incorrect results may occur.
+
+Solution:
+Use reduction clause.
+
+
+==========================================================
+3) OPENMP REDUCTION SYNTAX
+==========================================================
+
+#pragma omp parallel for reduction(operator : variable)
+
+Example:
+
+#pragma omp parallel for reduction(+ : sum)
+
+Operators supported:
++   Addition
+*   Multiplication
+min Minimum
+max Maximum
+
+
+==========================================================
+4) HOW REDUCTION WORKS
+==========================================================
+
+Suppose array:
+
+1 2 3 4
+
+Using 2 threads:
+
+Thread 1:
+1 + 2 = 3
+
+Thread 2:
+3 + 4 = 7
+
+Final:
+3 + 7 = 10
+
+OpenMP automatically combines results.
+
+
+==========================================================
+5) WHAT IS OPENMP?
+==========================================================
+
+OpenMP (Open Multi-Processing) is an API for
+parallel programming in C/C++.
+
+Used for:
+- Multithreading
+- Parallel loops
+- Faster execution
+
+Header File:
+#include <omp.h>
+
+
+==========================================================
+6) IMPORTANT OPENMP DIRECTIVES
+==========================================================
+
+a) #pragma omp parallel
+Creates parallel threads.
+
+b) #pragma omp parallel for
+Executes loop iterations in parallel.
+
+c) reduction()
+Safely combines thread results.
+
+
+==========================================================
+7) ADVANTAGES OF REDUCTION
+==========================================================
+
+- Faster computation
+- Avoids race conditions
+- Efficient parallel execution
+- Better CPU utilization
+
+
+==========================================================
+8) TIME COMPLEXITY
+==========================================================
+
+Minimum Search:
+O(n)
+
+Maximum Search:
+O(n)
+
+Summation:
+O(n)
+
+Average:
+O(n)
+
+
+==========================================================
+9) APPLICATIONS
+==========================================================
+
+- Scientific Computing
+- Data Analytics
+- Machine Learning
+- Statistical Calculations
+- Big Data Processing
+
+
+==========================================================
+10) COMPILATION COMMAND
+==========================================================
+
+Linux / MSYS2 / MinGW64:
+
+g++ filename.cpp -fopenmp
+
+Run:
+
+./a.out
+
+Windows PowerShell:
+
+g++ filename.cpp -fopenmp -o program
+
+.\program.exe
+
+
+==========================================================
+11) IMPORTANT VIVA QUESTIONS
+==========================================================
+
+Q1. What is reduction in OpenMP?
+Ans:
+Reduction combines results from multiple threads
+into a single variable safely.
+
+----------------------------------------------------------
+
+Q2. Why use reduction?
+Ans:
+To avoid race conditions during parallel execution.
+
+----------------------------------------------------------
+
+Q3. What is race condition?
+Ans:
+When multiple threads modify shared data simultaneously.
+
+----------------------------------------------------------
+
+Q4. What is OpenMP?
+Ans:
+An API for parallel programming in C/C++.
+
+----------------------------------------------------------
+
+Q5. What is parallel programming?
+Ans:
+Executing multiple tasks simultaneously using
+multiple CPU cores.
+
+----------------------------------------------------------
+
+Q6. Difference between sequential and parallel execution?
+Ans:
+
+Sequential:
+One task executes at a time.
+
+Parallel:
+Multiple tasks execute simultaneously.
+
+==========================================================
+
+*/
