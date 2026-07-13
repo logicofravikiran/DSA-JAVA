@@ -9,15 +9,15 @@ public class CommaSeparated {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String line = br.readLine();
+        String line = br.readLine().trim();
 
-        line.trim();
+        // line.trim();
 
         String[] parts = line.split(",");
 
         int[] arr = new int[parts.length];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = Integer.parseInt(parts[i]);
+            arr[i] = Integer.parseInt(parts[i].trim());
         }
 
         System.out.println(Arrays.toString(arr));

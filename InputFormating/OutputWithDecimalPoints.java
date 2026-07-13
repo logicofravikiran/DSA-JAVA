@@ -14,7 +14,7 @@ public class OutputWithDecimalPoints {
         double num = sc.nextDouble();
         double n1 = Double.parseDouble(br.readLine());
 
-        System.out.println(String.format("%.3f", num));
+        System.out.println(String.format("%.3f", n1));
 
         sc.close();
         br.close();
